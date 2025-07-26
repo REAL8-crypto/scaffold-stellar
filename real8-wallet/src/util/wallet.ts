@@ -7,6 +7,7 @@ import {
 } from "@creit.tech/stellar-wallets-kit";
 import { Horizon } from "@stellar/stellar-sdk";
 import { networkPassphrase, stellarNetwork } from "../contracts/util";
+import { addTrustline, fetchLiquidityPools } from '../../stellar';
 
 const kit: StellarWalletsKit = new StellarWalletsKit({
   network: networkPassphrase as WalletNetwork,
@@ -64,3 +65,13 @@ export const fetchBalance = async (address: string) => {
 export type Balance = Awaited<ReturnType<typeof fetchBalance>>[number];
 
 export const wallet = kit;
+
+// Example function to add a trustline
+export async function addREAL8Trustline(accountId: string, secret: string) {
+  await addTrustline(accountId, secret);
+}
+
+// Example function to get liquidity pools
+export async function getREAL8LiquidityPools() {
+  return await fetchLiquidityPools();
+}

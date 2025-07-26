@@ -1,4 +1,4 @@
-import { Server, Asset } from '@stellar/stellar-sdk';
+import { Server, Asset, Operation, TransactionBuilder, Keypair } from '@stellar/stellar-sdk';
 
 // Connect to the Stellar public network
 export const server = new Server('https://horizon.stellar.org');
@@ -30,4 +30,33 @@ export async function fetchREAL8Balance(accountId: string) {
       bal.asset_issuer === 'GBVYYQ7XXRZW6ZCNNCL2X2THNPQ6IM4O47HAA25JTAG7Z3CXJCQ3W4CD'
   );
   return real8 ? real8.balance : '0';
+}
+
+/**
+ * Adds a trustline for the REAL8 asset.
+ * @param accountId - Stellar public key
+ * @param secret - Secret key of the account
+ */
+export async function addTrustline(accountId: string, secret: string) {
+  const account = await server.loadAccount(accountId);
+  const transaction = new TransactionBuilder(account, {
+    fee: await server.fetchBaseFee(),
+    networkPassphrase: 'Public Global Stellar Network ; September 2015',
+  })
+    .addOperation(Operation.changeTrust({ asset: REAL8 }))
+    .setTimeout(30)
+    .build();
+
+  transaction.sign(Keypair.fromSecret(secret));
+  await server.submitTransaction(transaction);
+}
+
+/**
+ * Fetches available liquidity pools for the REAL8 asset.
+ */
+export async function fetchLiquidityPools() {
+  const pools = await server.liquidityPools()
+    .forAsset(REAL8)
+    .call();
+  return pools.records;
 }
