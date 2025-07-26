@@ -1,11 +1,37 @@
-# Scaffold Stellar (fork)
+# Scaffold Stellar (REAL8 Fork)
 
 [![Apache 2.0 licensed](https://img.shields.io/badge/license-apache%202.0-blue.svg)](LICENSE)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/AhaLabs/scaffold-stellar)
 
-This a fork of **Scaffold Stellar**, a developer toolkit for building decentralized applications (dApps) and smart contracts on the [**Stellar** blockchain](https://stellar.org).
+This is a fork of **Scaffold Stellar**, a developer toolkit for building decentralized applications (dApps) and smart contracts on the [**Stellar** blockchain](https://stellar.org).
 
 It helps you go from **idea** to **working full-stack dApp** faster — by providing CLI tools, reusable contract templates, a smart contract registry, and a modern frontend.
+
+---
+
+## REAL8 Customizations
+
+This fork of Scaffold Stellar includes several customizations specific to REAL8:
+
+1. **Custom Smart Contracts**: We've added REAL8-specific smart contracts in the `contracts/real8/` directory.
+   - `TokenContract.rs`: Implements REAL8's unique token logic
+   - `GovernanceContract.rs`: Handles REAL8's decentralized governance features
+
+2. **Enhanced Frontend**: The `src/` directory includes REAL8-branded components and pages.
+   - Custom styling in `src/styles/real8-theme.css`
+   - REAL8-specific React components in `src/components/real8/`
+
+3. **Additional CLI Commands**: We've extended the Scaffold Stellar CLI with REAL8-specific commands:
+   ```bash
+   stellar scaffold real8-init  # Initialize a REAL8-specific project structure
+   stellar registry real8-deploy  # Deploy REAL8 contracts with predefined parameters
+
+4. **Modified Deployment Pipeline**: Our fork includes changes to the deployment scripts to accommodate REAL8's infrastructure:
+Updated deploy_registry.sh with REAL8-specific configurations
+New real8_post_deploy.sh script for additional setup steps
+
+5. **Documentation**: We've added REAL8-specific documentation in the docs/real8/ directory.
+For more details on these customizations, please refer to our REAL8 Developer Guide.
 
 ---
 
