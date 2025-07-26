@@ -1,9 +1,11 @@
-# Scaffold Stellar
+# Scaffold Stellar (fork)
 
 [![Apache 2.0 licensed](https://img.shields.io/badge/license-apache%202.0-blue.svg)](LICENSE)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/AhaLabs/scaffold-stellar)
 
-Scaffold Stellar is a convention-over-configuration toolkit for blockchain and distributed application development on the Stellar network. It provides a seamless development experience through CLI tools, smart contract management, and deployment utilities.
+This a fork of Scaffold Stellar, a convention-over-configuration toolkit for blockchain and distributed application development on the Stellar network. It provides a seamless development experience through CLI tools, smart contract management, and deployment utilities. 
+
+More info at: https://github.com/AhaLabs/scaffold-stellar
 
 The project consists of several main components:
 
