@@ -2990,7 +2990,8 @@ checksum = "23fb14cb19457329c82206317a5663005a4d404783dc74f4252769b0d5f42856"
 [[package]]
 name = "loam-build"
 version = "0.7.3"
-source = "git+https://github.com/loambuild/loam?rev=096da30cedd371651906cfbed034b955c7b50ab4#096da30cedd371651906cfbed034b955c7b50ab4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "afe8001c87529b6066e49796579a1ca66d4bb1936c4f00833e50e97e396eeb4f"
 dependencies = [
  "cargo_metadata",
  "thiserror 1.0.69",
@@ -3000,7 +3001,8 @@ dependencies = [
 [[package]]
 name = "loam-sdk"
 version = "0.6.16"
-source = "git+https://github.com/loambuild/loam?rev=096da30cedd371651906cfbed034b955c7b50ab4#096da30cedd371651906cfbed034b955c7b50ab4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a08ffc47d5dbfd2a9f1f24e4cb12f139cd661543ba85d772b50aaee6b1443b83"
 dependencies = [
  "loam-sdk-macro",
  "loam-soroban-sdk",
@@ -3009,7 +3011,8 @@ dependencies = [
 [[package]]
 name = "loam-sdk-macro"
 version = "0.8.6"
-source = "git+https://github.com/loambuild/loam?rev=096da30cedd371651906cfbed034b955c7b50ab4#096da30cedd371651906cfbed034b955c7b50ab4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6813faaefd11b2ad1d7bebccb60d2a25b0e50d1779ff4277e1068b7940eff5b9"
 dependencies = [
  "Inflector",
  "cargo_metadata",
@@ -3031,7 +3034,8 @@ dependencies = [
 [[package]]
 name = "loam-soroban-sdk"
 version = "0.6.16"
-source = "git+https://github.com/loambuild/loam?rev=096da30cedd371651906cfbed034b955c7b50ab4#096da30cedd371651906cfbed034b955c7b50ab4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2c08e63488991f8967d79b211f8dd6ade832d2940a19e53d2a5df4fd7af92dc9"
 dependencies = [
  "loam-sdk-macro",
  "soroban-sdk 22.0.4",
@@ -3040,7 +3044,8 @@ dependencies = [
 [[package]]
 name = "loam-subcontract-core"
 version = "0.7.9"
-source = "git+https://github.com/loambuild/loam?rev=096da30cedd371651906cfbed034b955c7b50ab4#096da30cedd371651906cfbed034b955c7b50ab4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d649cc3ec413f6aad3c92dc4aaa1cc49c558186fdf29ffd48aa0fbb2e73b6b37"
 dependencies = [
  "loam-sdk",
 ]
