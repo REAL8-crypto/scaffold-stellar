@@ -2,11 +2,12 @@
 use loam_sdk::{
     loamstorage,
     soroban_sdk::{
-        self, assert_with_error, contracttype, env, symbol_short, to_string, Address, BytesN, Env,
-        IntoVal, PersistentMap, String, Symbol,
+        self, assert_with_error, contracttype, env, symbol_short, Address, BytesN, Env, IntoVal,
+        LoamKey, PersistentMap, String, Symbol,
     },
     vec,
 };
+
 use loam_subcontract_core::Core;
 
 use crate::{
@@ -61,7 +62,7 @@ impl IsDeployable for C {
         if self.r.has(contract_name.clone()) {
             return Err(Error::AlreadyDeployed);
         }
-        if contract_name == to_string(REGISTRY) {
+        if contract_name == soroban_sdk::String::from_str(env, REGISTRY) {
             assert_with_error!(
                 env,
                 Contract_::admin_get().unwrap() == admin,

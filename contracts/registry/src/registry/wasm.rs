@@ -1,7 +1,8 @@
 use loam_sdk::{
     loamstorage,
-    soroban_sdk::{self, env, to_string, Address, BytesN, Map, PersistentMap, String},
+    soroban_sdk::{self, env, Address, BytesN, LoamKey, Map, PersistentMap, String},
 };
+
 use loam_subcontract_core::Core as _;
 
 use crate::{error::Error, name::validate, util::REGISTRY};
@@ -98,7 +99,9 @@ impl IsPublishable for W {
                 return Err(Error::AlreadyPublished);
             }
         }
-        if wasm_name == to_string(REGISTRY) && crate::Contract::admin_get().unwrap() != author {
+        if wasm_name == soroban_sdk::String::from_str(env(), REGISTRY)
+            && crate::Contract::admin_get().unwrap() != author
+        {
             return Err(Error::AdminOnly);
         }
         self.validate_version(&version, &wasm_name)?;
