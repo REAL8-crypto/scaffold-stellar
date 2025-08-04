@@ -6,8 +6,8 @@ import {
   WalletNetwork,
 } from "@creit.tech/stellar-wallets-kit";
 import { Horizon } from "@stellar/stellar-sdk";
-import { networkPassphrase, stellarNetwork } from "../contracts/util";
-import { addTrustline, fetchLiquidityPools } from '../../stellar';
+import { networkPassphrase, stellarNetwork, horizonUrl } from "../contracts/util";
+import { fetchLiquidityPools } from '../stellar';
 
 const kit: StellarWalletsKit = new StellarWalletsKit({
   network: networkPassphrase as WalletNetwork,
@@ -38,23 +38,8 @@ export const disconnectWallet = async () => {
   storage.removeItem("walletId");
 };
 
-function getHorizonHost(mode: string) {
-  switch (mode) {
-    case "LOCAL":
-      return "http://localhost:8000";
-    case "FUTURENET":
-      return "https://horizon-futurenet.stellar.org";
-    case "TESTNET":
-      return "https://horizon-testnet.stellar.org";
-    case "PUBLIC":
-      return "https://horizon.stellar.org";
-    default:
-      throw new Error(`Unknown Stellar network: ${mode}`);
-  }
-}
-
 export const fetchBalance = async (address: string) => {
-  const horizon = new Horizon.Server(getHorizonHost(stellarNetwork), {
+  const horizon = new Horizon.Server(horizonUrl, {
     allowHttp: stellarNetwork === "LOCAL",
   });
 
@@ -65,11 +50,6 @@ export const fetchBalance = async (address: string) => {
 export type Balance = Awaited<ReturnType<typeof fetchBalance>>[number];
 
 export const wallet = kit;
-
-// Example function to add a trustline
-export async function addREAL8Trustline(accountId: string, secret: string) {
-  await addTrustline(accountId, secret);
-}
 
 // Example function to get liquidity pools
 export async function getREAL8LiquidityPools() {

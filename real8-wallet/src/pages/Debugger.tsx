@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Layout, Code, Card, Button, Input } from "@stellar/design-system";
 import { Client } from "@stellar/stellar-sdk/contract";
 import { ContractForm } from "../debug/components/ContractForm.tsx";
@@ -17,33 +17,32 @@ const Debugger: React.FC = () => {
   const [isDetailExpanded, setIsDetailExpanded] = useState(false);
   const { contractName } = useParams<{ contractName?: string }>();
 
-  const contractKeys = Array.from(
-    new Set([...Object.keys(contractMap), ...Object.keys(failedContracts)]),
-  );
-  useEffect(() => {
-    if (!isLoading && contractKeys.length > 0) {
-      if (contractName && contractKeys.includes(contractName)) {
-        setSelectedContract(contractName);
-      } else {
-        setSelectedContract(contractKeys[0]);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contractName, isLoading, contractKeys.join(",")]);
+  const contractKeys = useMemo(() => {
+    return Array.from(
+      new Set([...Object.keys(contractMap), ...Object.keys(failedContracts)]),
+    );
+  }, [contractMap, failedContracts]);
 
   useEffect(() => {
-    if (!isLoading && contractKeys.length > 0) {
-      if (contractName && contractKeys.includes(contractName)) {
-        setSelectedContract(contractName);
-      } else if (!contractName) {
-        // Redirect to the first contract if no contractName in URL
-        navigate(`/debug/${contractKeys[0]}`, { replace: true });
-      } else {
-        setSelectedContract(contractKeys[0]);
-      }
+    if (isLoading || contractKeys.length === 0) {
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contractName, isLoading, contractKeys.join(",")]);
+
+    const isValidContractName =
+      contractName && contractKeys.includes(contractName);
+
+    if (isValidContractName) {
+      // The URL has a valid contract name, so we set it.
+      // This also handles the case where the user navigates between valid contracts.
+      setSelectedContract(contractName);
+    } else {
+      // If there's no contract name in the URL, or it's invalid,
+      // we navigate to the first available contract.
+      // This will trigger this effect again with a valid `contractName`.
+      const firstContract = contractKeys[0];
+      navigate(`/debug/${firstContract}`, { replace: true });
+    }
+  }, [contractName, contractKeys, isLoading, navigate]);
 
   if (isLoading) {
     return (

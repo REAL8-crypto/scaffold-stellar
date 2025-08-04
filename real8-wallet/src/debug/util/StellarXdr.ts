@@ -4,6 +4,7 @@ import init, {
   guess,
   decode_stream,
 } from "@stellar/stellar-xdr-json";
+import wasm from "@stellar/stellar-xdr-json/stellar_xdr_json_bg.wasm?url";
 
 // A wrapper for the Stellar XDR JSON
 declare global {
@@ -14,7 +15,7 @@ declare global {
 
 const initialize = async () => {
   if (!window.__STELLAR_XDR_INIT__) {
-    await init();
+    await init(wasm);
     window.__STELLAR_XDR_INIT__ = true;
   }
 };

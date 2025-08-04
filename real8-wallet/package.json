@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"stellar scaffold watch --build-clients\" \"vite\"",
-    "start": "concurrently \"stellar scaffold watch --build-clients\" \"vite\"",
+    "dev": "concurrently \"npx stellar-cli scaffold watch --build-clients\" \"vite\"",
+    "start": "concurrently \"npx stellar-cli scaffold watch --build-clients\" \"vite\"",
     "build": "tsc -b && vite build",
     "install:contracts": "npm install --workspace=packages && npm run build --workspace=packages",
     "preview": "vite preview",
@@ -47,6 +47,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
     "prettier": "3.5.3",
+    "stellar-cli": "^1.0.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.32.1",
     "vite": "^6.3.1",
