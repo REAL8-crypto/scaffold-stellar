@@ -3,12 +3,14 @@ use assert_matches::assert_matches;
 use loam_sdk::soroban_sdk::{
     self, env, set_env,
     testutils::{Address as _, BytesN as _},
-    to_string, Address, Bytes, BytesN, Env, IntoVal,
+    Address, Bytes, BytesN, Env, IntoVal,
 };
+use soroban_sdk::String as SorobanString;
+
 extern crate std;
 
-fn default_version() -> soroban_sdk::String {
-    to_string("0.0.0")
+fn default_version(env: &Env) -> soroban_sdk::String {
+    SorobanString::from_str(env, "0.0.0")
 }
 
 stellar_registry::import_contract_client!(registry);
