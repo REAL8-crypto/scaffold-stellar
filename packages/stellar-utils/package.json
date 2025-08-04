@@ -1,0 +1,8 @@
+{
+  "name": "@real8/stellar-utils",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@stellar/stellar-sdk": "^11.2.0"
+  }
+}
