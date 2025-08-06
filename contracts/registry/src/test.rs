@@ -1,4 +1,4 @@
-use crate::{error::Error, name::is_valid, SorobanContract__Client as SorobanContractClient};
+use crate::{error::Error, name::is_valid, SorobanContract__, SorobanContract__Client};
 use assert_matches::assert_matches;
 use loam_sdk::soroban_sdk::{
     self, env, set_env,
@@ -9,6 +9,9 @@ use soroban_sdk::String as SorobanString;
 
 extern crate std;
 
+// Use `include_bytes!` to get the WASM without name collisions.
+const REGISTRY_WASM: &[u8] = include_bytes!("../../../target/stellar/registry.wasm");
+
 fn to_string(env: &Env, s: &str) -> SorobanString {
     SorobanString::from_str(env, s)
 }
@@ -17,23 +20,16 @@ fn default_version(env: &Env) -> soroban_sdk::String {
     to_string(env, "0.0.0")
 }
 
-// stellar_registry::import_contract_client!(registry);
-// Equivalent to:
-
-mod registry {
-    use super::soroban_sdk;
-    soroban_sdk::contractimport!(file = "../../../target/stellar/registry.wasm");
-}
-
-fn init() -> (SorobanContractClient<'static>, Address) {
+// Initialize the LOCAL contract, not the imported one.
+fn init() -> (SorobanContract__Client<'static>, Address) {
     set_env(Env::default());
     let env = env();
-    let contract_id = Address::generate(env);
+    // Register the local contract type, not the wasm.
     let address = Address::generate(env);
-    let client = SorobanContractClient::new(
-        env,
-        &env.register_at(&contract_id, registry::WASM, (address.clone(),)),
-    );
+    let contract_id = env.register(SorobanContract__, (address.clone(),));
+    let client = SorobanContract__Client::new(env, &contract_id);
+    // Initialize the admin, which is required by the contract.
+    // client.admin_set(&address);  <-- Remove this line, since admin is initialized during contract registration.
     (client, address)
 }
 
@@ -48,14 +44,15 @@ fn handle_error_cases() {
         Ok(Error::NoSuchContractPublished)
     );
 
-    let wasm_hash = env.deployer().upload_contract_wasm(registry::WASM);
+    // Use the new REGISTRY_WASM constant
+    let wasm_hash = env.deployer().upload_contract_wasm(REGISTRY_WASM);
 
     assert_matches!(
         client.try_fetch_hash(name, &None).unwrap_err(),
         Ok(Error::NoSuchContractPublished)
     );
 
-    let bytes = Bytes::from_slice(env, registry::WASM);
+    let bytes = Bytes::from_slice(env, REGISTRY_WASM);
     env.mock_all_auths();
     let version = default_version(env);
     client.publish(name, address, &bytes, &version);
@@ -67,12 +64,6 @@ fn handle_error_cases() {
             .unwrap_err(),
         Ok(Error::NoSuchVersion)
     );
-    // let other_address = Address::generate(env);
-    // let res = client
-    //     .try_publish(name, &other_address, &bytes, &None, &None)
-    //     .unwrap_err();
-
-    // assert!(matches!(res, Ok(Error::AlreadyPublished)));
 }
 
 #[test]
@@ -80,13 +71,12 @@ fn returns_most_recent_version() {
     let (client, address) = &init();
     let env = env();
     let name = &to_string(env, "publisher");
-    // client.register_name(address, name);
-    let bytes = Bytes::from_slice(env, registry::WASM);
+    let bytes = Bytes::from_slice(env, REGISTRY_WASM);
     env.mock_all_auths();
     let version = default_version(env);
     client.publish(name, address, &bytes, &version);
     let fetched_hash = client.fetch_hash(name, &None);
-    let wasm_hash = env.deployer().upload_contract_wasm(registry::WASM);
+    let wasm_hash = env.deployer().upload_contract_wasm(REGISTRY_WASM);
     assert_eq!(fetched_hash, wasm_hash);
 
     let second_hash: BytesN<32> = BytesN::random(env);
@@ -136,7 +126,7 @@ fn validate_version() {
     let (client, address) = &init();
     let env = env();
     let name = &to_string(env, "registry");
-    let bytes = &Bytes::from_slice(env, registry::WASM);
+    let bytes = &Bytes::from_slice(env, REGISTRY_WASM);
     env.mock_all_auths();
     let version = &to_string(env, "0.0.0");
     let new_version = &to_string(env, "0.0.1");
